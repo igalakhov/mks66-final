@@ -24,6 +24,7 @@ protected:
 private:
     unsigned char * values; // pixel values (1d array because I'm cool)
     float_mat * z_buffer;
+    bool * touch_buffer;
 
 };
 

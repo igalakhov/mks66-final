@@ -62,10 +62,22 @@ void Display::display(){
 
 }
 
+float_mat Display::constrain(float_mat val, float_mat b, float_mat u){
+    if(val > u) return u;
+    if(val < b) return b;
+    return val;
+}
+
 void Display::set(float_mat float_x, float_mat float_y, float_mat z, float_mat opacity, struct color * to_set){
 
     int x = (int) std::round(float_x);
     int y = (int) std::round(float_y);
+
+//    std::printf("%f, %f, %f, %f, %u, %u, %u, %u, %u, %u\n", float_x, float_y, z, opacity,
+//            to_set->r, to_set->g, to_set->b,
+//                (unsigned char) std::round(to_set->r * opacity),
+//                (unsigned char) std::round(to_set->g * opacity),
+//                (unsigned char) std::round(to_set->b * opacity));
 
 
     if(x < 0 or x > IMAGE_WIDTH - 1 or y < 0 or y > IMAGE_HEIGHT - 1)
@@ -74,12 +86,29 @@ void Display::set(float_mat float_x, float_mat float_y, float_mat z, float_mat o
     if(z_buffer[y*IMAGE_HEIGHT + x] - z <= 0.0001f) {
         unsigned char *cur = values + ((y * IMAGE_WIDTH) + x) * 3;
 
+
+
+        if(touch_buffer[y*IMAGE_HEIGHT + x]){
+            *cur = (unsigned char) constrain(*cur + std::round(to_set->r * opacity), 0, 255);
+            cur++;
+            *cur = (unsigned char) constrain(*cur + std::round(to_set->g * opacity), 0, 255);
+            cur++;
+            *cur = (unsigned char) constrain(*cur + std::round(to_set->b * opacity), 0, 255);
+        } else {
+            touch_buffer[y*IMAGE_HEIGHT + x] = true;
+            *cur = (unsigned char) std::round(to_set->r * opacity);
+            cur++;
+            *cur = (unsigned char) std::round(to_set->g * opacity);
+            cur++;
+            *cur = (unsigned char) std::round(to_set->b * opacity);
+        }
+
         // "efficiency"
-        *cur = to_set->r;
-        cur++;
-        *cur = to_set->g;
-        cur++;
-        *cur = to_set->b;
+//        *cur = to_set->r;
+//        cur++;
+//        *cur = to_set->g;
+//        cur++;
+//        *cur = to_set->b;
 
         z_buffer[y*IMAGE_HEIGHT + x] = z;
 
@@ -176,10 +205,13 @@ void Display::save(std::string file_name, std::string extention){
 Display::Display() {
     values = new unsigned char[NUM_PIXELS * 3];
     z_buffer = new float_mat[NUM_PIXELS];
+    touch_buffer = new bool[NUM_PIXELS];
 
 
-    for(int i = 0; i < NUM_PIXELS; i++)
+    for(int i = 0; i < NUM_PIXELS; i++) {
         z_buffer[i] = Z_BUFFER_MIN;
+        touch_buffer[i] = false;
+    }
 
     unsigned char *cur = values;
 
@@ -206,4 +238,5 @@ Display::Display() {
 // deconstructor
 Display::~Display() {
     delete values;
+    delete z_buffer;
 }

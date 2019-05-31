@@ -61,9 +61,9 @@ void Drawer::draw_polygons(TriangleMatrix * m, std::vector<double **> &sources, 
 
             scan_line(s + 0, s + 4, s + 8);
 
-//            draw_line_new((int) s[0], (int) s[1], s[2], (int) s[4], (int) s[5], s[6]);
-//            draw_line_new((int) s[4], (int) s[5], s[6], (int) s[8], (int) s[9], s[10]);
-//            draw_line_new((int) s[0], (int) s[1], s[2], (int) s[8], (int) s[9], s[10]);
+//            draw_line_wu(s[0], s[1], s[2],  s[4],  s[5], s[6]);
+//            draw_line_wu( s[4],  s[5], s[6],  s[8],  s[9], s[10]);
+//            draw_line_wu( s[0],  s[1], s[2],  s[8],  s[9], s[10]);
 
         }
 
@@ -122,7 +122,7 @@ void Drawer::scan_line(float_mat * p0, float_mat * p1, float_mat * p2) {
         cur_z = z0;
         dz = (z0 - z1)/(x0 - x1);
 
-        draw_line_simon((int) std::round(x0), y, z0, (int) std::round(x1), y, z1);
+        //draw_line_simon((int) std::round(x0), y, z0, (int) std::round(x1), y, z1);
         draw_line_wu(x0, y, z0, x1, y, z1);
 
         x0 += dx0;
@@ -146,6 +146,96 @@ void Drawer::scan_line(float_mat * p0, float_mat * p1, float_mat * p2) {
         }
 
     }
+}
+
+int Drawer::ipart(float_mat x) {return (int) x;}
+int Drawer::round(float_mat x) {return ipart(x + 0.5);}
+float_mat Drawer::fpart(float_mat x) {return x - (int) x;}
+float_mat Drawer::rfpart(float_mat x) {return 1 - fpart(x);}
+
+
+void Drawer::draw_line_wu(float_mat x0, float_mat y0, float_mat z0, float_mat x1, float_mat y1, float_mat z1){
+    bool steep = std::abs(y1 - y0) > std::abs(x1 - x0);
+
+    //std::printf("(%f, %f, %f) --> (%f, %f, %f)\n", x0, y0, z0, x1, y1, z1);
+
+    if(steep){
+        //std::printf("swap 1\n");
+        std::swap(x0, y0);
+        std::swap(x1, y1);
+    }
+    if(x0 > x1){
+        //std::printf("swap 2\n");
+        std::swap(x0, x1);
+        std::swap(y0, y1);
+    }
+
+    float_mat dx = x1 - x0;
+    float_mat dy = y1 - y0;
+    float_mat grad = dy/dx;
+    if(dx == 0)
+        grad = 1;
+
+    if(y0 != y1)
+        std::printf("(%f, %f, %f) --> (%f, %f, %f)\n", x0, y0, z0, x1, y1, z1);
+//    std::printf("grad: %f\n", grad);
+
+    // first endpoint
+    int xend = round(x0);
+    float_mat yend = y0 + grad*(xend - x0);
+    float_mat xgap = rfpart(x0 + 0.5f);
+    float_mat xpxl1 = xend;
+    float_mat ypxl1 = ipart(yend);
+
+    //std::printf("yend: %f, xgap: %f, xpxl1: %f, ypxl1: %f\n", yend, xgap, xpxl1, ypxl1);
+    if(steep){
+        Display::set(ypxl1, xpxl1, 0, rfpart(yend)*xgap, &cur_color);
+        Display::set(ypxl1 + 1, xpxl1, 0, fpart(yend)*xgap, &cur_color);
+    } else {
+        Display::set(xpxl1, ypxl1, 0, rfpart(yend)*xgap, &cur_color);
+        Display::set(xpxl1, ypxl1 + 1, 0, fpart(yend)*xgap, &cur_color);
+    }
+
+    float_mat intery = yend + grad;
+
+    xend = round(x1);
+    yend = y1 + grad * (xend - x1);
+    xgap = fpart(x1 + 0.5);
+    float_mat xpxl2 = xend;
+    float_mat ypxl2 = ipart(yend);
+
+    //std::printf("yend: %f, xgap: %f, xpxl2: %f, ypxl2: %f\n", yend, xgap, xpxl2, ypxl2);
+
+    if(steep) {
+        Display::set(ypxl2, xpxl2, 0, rfpart(yend) * xgap, &cur_color);
+        Display::set(ypxl2 + 1, xpxl2, 0, fpart(yend) * xgap, &cur_color);
+    } else {
+        Display::set(xpxl2, ypxl2, 0, rfpart(yend) * xgap, &cur_color);
+        Display::set(xpxl2, ypxl2 + 1, 0, fpart(yend) * xgap, &cur_color);
+    }
+
+    if(steep){
+        for(int x = (int) xpxl1 + 1; x < xpxl2; x++){
+            Display::set(ipart(intery), x, 0, rfpart(intery), &cur_color);
+            Display::set(ipart(intery)+1, x, 0, fpart(intery), &cur_color);
+            intery += grad;
+            //std::printf("%f\n", intery);
+        }
+    } else {
+        for(int x = (int) xpxl1 + 1; x < xpxl2; x++){
+            //printf("%d, %d\n ", x, ipart(intery));
+            Display::set(x, ipart(intery), 0, rfpart(intery), &cur_color);
+            Display::set(x, ipart(intery)+1, 0, fpart(intery), &cur_color);
+            intery += grad;
+        }
+    }
+
+    // second endpoint
+
+    //std::printf("(%f, %f, %f) --> (%f, %f, %f)\n", x0, y0, z0, x1, y1, z1);
+
+
+
 }
 
 // draw edges

@@ -32,6 +32,16 @@ void render_frame(int);
 
 
 void my_main() {
+
+    auto d = new Drawer();
+
+    //d->draw_line_wu(0, 0, 0, 300, 400, 0);
+    //d->draw_line_wu(100, 400.5, 0, 100, 100.5, 0);
+
+    //d->display();
+
+
+    //return;
     first_pass();
 
 
