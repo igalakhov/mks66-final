@@ -97,12 +97,11 @@ struct command
             SYMBOL *p;
         } basename;
         struct {
-            SYMBOL *p;
+            char * name;
         } save_knobs;
         struct {
             double start_frame, end_frame;
-            SYMBOL *knob_list0;
-            SYMBOL *knob_list1;
+            char * knob_list0, * knob_list1, * easing, * points;
         } tween;
         struct {
             double num_frames;

@@ -11,7 +11,7 @@
 #include "parsing/mdl/coordinate_stack.h"
 #include "drawing/3d/3d.h"
 #include "parsing/obj_parser.h"
-#include "drawing/easing.h"
+#include "drawing/animation/easing.h"
 // "globals"
 
 
@@ -51,6 +51,7 @@ void my_main() {
     // with that being said, do a second pass
     second_pass();
 
+    //return;
 
     third_pass();
 
@@ -124,6 +125,32 @@ void add_value(vary_node **knobs, int frame, char *name, double delta){
 
 }
 
+void add_vary(char * name, int start_frame, int end_frame, double start_val, double end_val, char * easing, char * points){
+    if(start_frame == end_frame)
+        return;
+
+    double delta = (end_val - start_val)/(end_frame - start_frame);
+
+    int t = 0;
+    double b = start_val;
+    double c = end_val - start_val;
+    double d = end_frame - start_frame;
+
+    // figure out which function we need
+    int easing_function = get_easing_func(easing, points);
+
+
+    for(int j = (int)std::round(start_frame); j <= (int)std::round(end_frame); j++){
+
+
+        double val = get_easing(t, b, c, d, easing_function);
+
+        add_value(knobs, j, name, val);
+
+        t++;
+    }
+}
+
 void second_pass(){
     knobs = (struct vary_node **)calloc((size_t) num_frames, sizeof(struct vary_node *));
     // set all knobs to null
@@ -139,63 +166,85 @@ void second_pass(){
         struct command cur = op[i];
         switch (cur.opcode) {
 
+            case SET:{
+              s->lookup_symbol(cur.op.set.p->name)->s.val = cur.op.set.val;
+              break;
+            };
+
+            case SAVE_KNOBS: {
+                s->add_symbol(cur.op.save_knobs.name, SYM_KNOB_LIST, s->get_knob_list());
+                break;
+            }
+
+            case TWEEN: {
+
+                if(s->lookup_symbol(cur.op.tween.knob_list0) == nullptr)
+                    printf("ERROR: Unrecognized knob list [%s]\n", cur.op.tween.knob_list0);
+
+                if(s->lookup_symbol(cur.op.tween.knob_list1) == nullptr)
+                    printf("ERROR: Unrecognized knob list [%s]\n", cur.op.tween.knob_list1);
+
+                if(s->lookup_symbol(cur.op.tween.knob_list0) == nullptr or s->lookup_symbol(cur.op.tween.knob_list1) == nullptr){
+                    printf("Tween will be ignored\n");
+                    continue;
+                }
+
+                KnobList * first = s->lookup_symbol(cur.op.tween.knob_list0)->s.k;
+                KnobList * second = s->lookup_symbol(cur.op.tween.knob_list1)->s.k;
+
+//                first->print();
+//                second->print();
+
+                for(auto & k : first->vals){
+                    add_vary(k.first, (int) std::round(cur.op.tween.start_frame), (int) std::round(cur.op.tween.end_frame),
+                            k.second, second->vals[k.first], cur.op.tween.easing, cur.op.tween.points);
+                    //printf("%s: %f to %f\n", k.first, k.second, second->vals[k.first]);
+                }
+
+                // add deltas from relevant lists
+
+                break;
+            }
+
             case VARY: {
-//                std::printf("%s: frame %d to %d, vary %d to %d\n", cur.op.vary.p->name,
+
+                  add_vary(cur.op.vary.p->name, (int) std::round(cur.op.vary.start_frame),
+                           (int) std::round(cur.op.vary.end_frame),
+                           std::round(cur.op.vary.start_val),
+                           std::round(cur.op.vary.end_val),
+                           cur.op.vary.easing,
+                           cur.op.vary.points);
+
+////                std::printf("%s: frame %d to %d, vary %d to %d\n", cur.op.vary.p->name,
 //                            (int) std::round(cur.op.vary.start_frame),
 //                            (int) std::round(cur.op.vary.end_frame),
 //                            (int) std::round(cur.op.vary.start_val),
 //                            (int) std::round(cur.op.vary.end_val));
 
-                assert(cur.op.vary.start_frame != cur.op.vary.end_frame); // no weird errors
-
-                double delta = (cur.op.vary.end_val - cur.op.vary.start_val)/(cur.op.vary.end_frame - cur.op.vary.start_frame);
-
-                int t = 0;
-                double b = cur.op.vary.start_val;
-                double c = cur.op.vary.end_val - cur.op.vary.start_val;
-                double d = cur.op.vary.end_frame - cur.op.vary.start_frame;
-
-//                std::cout << "HELLO" << std::endl;
-
-                //std::printf("%d, %d\n", (int)std::round(cur.op.vary.start_frame) + 1, (int)std::round(cur.op.vary.end_frame));
-
-                double prev = cur.op.vary.start_val;
-
-                // figure out which function we need
-                int easing_function = get_easing_func(cur.op.vary.easing, cur.op.vary.points);
-
-                //printf("%s, %s\n", cur.op.vary.easing, cur.op.vary.points);
-
-                //printf("%d\n", easing_function);
 
 
-                for(int j = (int)std::round(cur.op.vary.start_frame); j <= (int)std::round(cur.op.vary.end_frame); j++){
-
-                    //std::printf("%d ", j);
-                    //add_value(knobs, j, cur.op.vary.p->name, delta);
-
-                    //std::printf("t: %d, b: %f, c: %f, d: %f\n", t, b, c, d);
-
-
-                    // calculate value
-
-
-                    double val = get_easing(t, b, c, d, easing_function);
-
-//                    std::printf("val: %f\n", val);
-////                    std::printf("prev: %f\n", prev);
-//                    std::printf("change: %f\n", prev - val);
-
-                    add_value(knobs, j, cur.op.vary.p->name, val);
-
-                    prev = val;
-
-                    t++;
-                }
-
-                //std::printf("%f\n", delta);
-
-                // set the knob default
+//                assert(cur.op.vary.start_frame != cur.op.vary.end_frame); // no weird errors
+//
+//                double delta = (cur.op.vary.end_val - cur.op.vary.start_val)/(cur.op.vary.end_frame - cur.op.vary.start_frame);
+//
+//                int t = 0;
+//                double b = cur.op.vary.start_val;
+//                double c = cur.op.vary.end_val - cur.op.vary.start_val;
+//                double d = cur.op.vary.end_frame - cur.op.vary.start_frame;
+//
+//                // figure out which function we need
+//                int easing_function = get_easing_func(cur.op.vary.easing, cur.op.vary.points);
+//
+//
+//                for(int j = (int)std::round(cur.op.vary.start_frame); j <= (int)std::round(cur.op.vary.end_frame); j++){
+//
+//
+//                    double val = get_easing(t, b, c, d, easing_function);
+//
+//                    add_value(knobs, j, cur.op.vary.p->name, val);
+//
+//                    t++;
+//                }
 
                 break;
             }
@@ -206,6 +255,8 @@ void second_pass(){
         }
 
     }
+
+    //s->get_knob_list()->print();
 
 
 
@@ -495,7 +546,14 @@ void render_frame(int frame) {
                 break;
             }
 
+            case SET: {
+                s->lookup_symbol(cur.op.set.p->name)->s.val = cur.op.set.val;
+                break;
+            }
+
                 // stuff we don't need to do anything for since the parser and lexer do it for us
+            case TWEEN:
+            case SAVE_KNOBS:
             case VARY:
             case BASENAME:
             case FRAMES:

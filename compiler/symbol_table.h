@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "../matrix/transformation_matrix.h"
+#include "../drawing/animation/knob_list.h"
 #include "../settings.h"
 
 #define MAX_SYMBOLS 512
@@ -19,6 +20,7 @@
 #define SYM_LIGHT 4
 #define SYM_FILE   5
 #define SYM_STRING 5
+#define SYM_KNOB_LIST 6
 
 #define AMBIENT_R 0
 #define DIFFUSE_R 1
@@ -48,6 +50,7 @@ typedef struct
         struct constants * c;
         struct light * l;
         double val;
+        KnobList * k;
     } s;
 
 } SYMBOL;
@@ -64,7 +67,7 @@ public:
     SYMBOL * add_symbol(const char *, int, void *);
     void print();
     void print_values();
-
+    KnobList * get_knob_list();
 
 private:
     SYMBOL * symtab; // actual list of symbols

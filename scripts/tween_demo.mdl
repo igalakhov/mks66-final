@@ -1,0 +1,33 @@
+basename tween_demo
+frames 100
+shading phong
+
+move 250 250 0
+move 1 0 0 k0
+move 0 1 0 k1
+rotate x 1 k4
+rotate y 1 k5
+rotate z 1 k6
+scale 1 1 1 k3
+torus 0 0 0 50 100
+
+set k0 -200
+set k1 200
+set k3 0.25
+set k4 90
+set k5 360
+set k6 10
+
+save_knobs first
+
+set k0 100
+set k1 -100
+set k3 2
+set k4 130
+set k5 -75
+set k6 300
+
+save_knobs second
+
+tween 0 50 first second sine inout
+tween 51 99 second first elastic inout

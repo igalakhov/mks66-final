@@ -16,16 +16,16 @@ easing function endpoints can be: [in, out, inout]
 
 
 ### features implemented
-* Gouraund shading [done]
-* Phong shading [done]
-* MDL shading commands [done]
-* Multiple light sources [done]
-* More easing functions that can be specified from the mdl file [done]
+* Gouraund shading
+* Phong shading
+* MDL shading commands
+* Multiple light sources
+* More easing functions that can be specified from the mdl file
+* Tweens (with easing functions)
 
 
 ### features wishlist
-* OBJ file parsing (with mtl material files)
-* Tweens (???)
+* OBJ file parsing (with mtl material files) [currently being worked on]
 * Possibly camera and focal operations (???)
 
 

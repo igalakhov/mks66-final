@@ -28,6 +28,10 @@ void SymbolTable::print() {
             case SYM_FILE:
                 printf("Type: SYM_VALUE\n");
                 printf("Name: %s\n", symtab[i].name);
+                break;
+            case SYM_KNOB_LIST:
+                printf("KNOB LIST %s", symtab[i].name);
+                break;
             default:
                 break;
         }
@@ -94,6 +98,9 @@ SYMBOL *SymbolTable::add_symbol(const char *name, int type, void *data) {
                 t->s.val = *((double *) data);
             break;
         }
+        case SYM_KNOB_LIST: {
+            t->s.k = (KnobList *) data;
+        }
         default: // file or string
             break;
     }
@@ -103,7 +110,6 @@ SYMBOL *SymbolTable::add_symbol(const char *name, int type, void *data) {
 }
 
 SYMBOL *SymbolTable::lookup_symbol(const char *name) {
-    //std::printf("%s\n", name);
     int i;
     for (i = 0; i < lastsym; i++) {
         if (!strcmp(name, symtab[i].name)) {
@@ -147,4 +153,23 @@ void SymbolTable::print_constants(struct constants *p) {
 
     std::printf("Red - %6.2f\tGreen - %6.2f\tBlue - %6.2f\n",
                 p->red, p->green, p->blue);
+}
+
+// makes a knob list
+KnobList * SymbolTable::get_knob_list(){
+
+    auto ret = new KnobList();
+
+    for (int i = 0; i < lastsym; i++) {
+
+        switch (symtab[i].type) {
+            case SYM_VALUE:
+                ret->vals[symtab[i].name] = symtab[i].s.val;
+                break;
+            default:
+                break;
+        }
+    }
+
+    return ret;
 }

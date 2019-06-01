@@ -704,7 +704,8 @@ SAVE_KNOBS STRING
 {
   lineno++;
   op[lastop].opcode = SAVE_KNOBS;
-  op[lastop].op.save_knobs.p = s->add_symbol($2,SYM_STRING,0);
+  op[lastop].op.save_knobs.name = (char *) std::malloc(sizeof(char)*255);
+  std::strcpy(op[lastop].op.save_knobs.name, $2);
   lastop++;
 }|
 
@@ -714,8 +715,46 @@ TWEEN DOUBLE DOUBLE STRING STRING
   op[lastop].opcode = TWEEN;
   op[lastop].op.tween.start_frame = $2;
   op[lastop].op.tween.end_frame = $3;
-  op[lastop].op.tween.knob_list0 = s->add_symbol($4,SYM_STRING,0);
-  op[lastop].op.tween.knob_list1 = s->add_symbol($5,SYM_STRING,0);
+  op[lastop].op.tween.knob_list0 = (char *) std::malloc(sizeof(char)*255);
+  std::strcpy(op[lastop].op.tween.knob_list0, $4);
+  op[lastop].op.tween.knob_list1 = (char *) std::malloc(sizeof(char)*255);
+  std::strcpy(op[lastop].op.tween.knob_list1, $5);
+
+  op[lastop].op.tween.easing = nullptr;
+  op[lastop].op.tween.points = nullptr;
+
+  lastop++;
+}|
+TWEEN DOUBLE DOUBLE STRING STRING STRING
+{
+  lineno++;
+  op[lastop].opcode = TWEEN;
+  op[lastop].op.tween.start_frame = $2;
+  op[lastop].op.tween.end_frame = $3;
+  op[lastop].op.tween.knob_list0 = (char *) std::malloc(sizeof(char)*255);
+  std::strcpy(op[lastop].op.tween.knob_list0, $4);
+  op[lastop].op.tween.knob_list1 = (char *) std::malloc(sizeof(char)*255);
+  std::strcpy(op[lastop].op.tween.knob_list1, $5);
+  op[lastop].op.tween.easing = (char *) std::malloc(sizeof(char)*255);
+  std::strcpy(op[lastop].op.tween.easing, $6);
+  op[lastop].op.tween.points = nullptr;
+
+  lastop++;
+}|
+TWEEN DOUBLE DOUBLE STRING STRING STRING STRING
+{
+  lineno++;
+  op[lastop].opcode = TWEEN;
+  op[lastop].op.tween.start_frame = $2;
+  op[lastop].op.tween.end_frame = $3;
+  op[lastop].op.tween.knob_list0 = (char *) std::malloc(sizeof(char)*255);
+  std::strcpy(op[lastop].op.tween.knob_list0, $4);
+  op[lastop].op.tween.knob_list1 = (char *) std::malloc(sizeof(char)*255);
+  std::strcpy(op[lastop].op.tween.knob_list1, $5);
+  op[lastop].op.tween.easing = (char *) std::malloc(sizeof(char)*255);
+  std::strcpy(op[lastop].op.tween.easing, $6);
+  op[lastop].op.tween.points = (char *) std::malloc(sizeof(char)*255);
+  std::strcpy(op[lastop].op.tween.points, $7);
   lastop++;
 }|
 
