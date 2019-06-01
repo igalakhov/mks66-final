@@ -1,0 +1,86 @@
+shading phong
+basename easing_demo
+frames 100
+
+move 75 425 0
+
+push
+move 1 0 0 k0
+rotate x 1 spinny
+rotate y 2 spinny
+rotate z 3 spinny
+sphere 0 0 0 25
+pop
+
+move 0 -75 0
+
+push
+move 1 0 0 k1
+rotate x 1 spinny
+rotate y 2 spinny
+rotate z 3 spinny
+sphere 0 0 0 25
+pop
+
+move 0 -75 0
+
+push
+move 1 0 0 k2
+rotate x 1 spinny
+rotate y 2 spinny
+rotate z 3 spinny
+sphere 0 0 0 25
+pop
+
+move 0 -75 0
+
+push
+move 1 0 0 k3
+rotate x 1 spinny
+rotate y 2 spinny
+rotate z 3 spinny
+sphere 0 0 0 25
+pop
+
+move 0 -75 0
+
+push
+move 1 0 0 k4
+rotate x 1 spinny
+rotate y 2 spinny
+rotate z 3 spinny
+sphere 0 0 0 25
+pop
+
+move 0 -75 0
+
+push
+move 1 0 0 k5
+rotate x 1 spinny
+rotate y 2 spinny
+rotate z 3 spinny
+sphere 0 0 0 25
+pop
+
+vary k0 0 50 0 350 sine in
+vary k0 51 99 350 0 sine out
+
+vary k1 0 50 0 350 bounce in
+vary k1 51 99 350 0 bounce out
+
+vary k2 0 50 0 350 expo in
+vary k2 51 99 350 0 expo out
+
+vary k3 0 50 0 350 quad in
+vary k3 51 99 350 0 quad out
+
+vary k4 0 50 0 350 circ in
+vary k4 51 99 350 0 circ out
+
+vary k5 0 50 0 350 linear in
+vary k5 51 99 350 0 linear out
+
+vary spinny 0 99 0 360
+
+
+display

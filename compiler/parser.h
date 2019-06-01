@@ -111,6 +111,7 @@ struct command
             SYMBOL *p;
             double start_frame, end_frame, start_val, end_val;
             char * easing;
+            char * points;
         } vary;
         struct {
             SYMBOL *p;

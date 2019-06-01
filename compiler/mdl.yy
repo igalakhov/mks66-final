@@ -49,6 +49,7 @@
 %token <string> SET MOVE SCALE ROTATE BASENAME SAVE_KNOBS TWEEN FRAMES VARY
 %token <string> PUSH POP SAVE GENERATE_RAYFILES
 %token <string> SHADING SHADING_TYPE SETKNOBS FOCAL DISPLAY WEB
+%token <string> EASING_TYPE EASING_POINTS
 %token <string> CO
 %%
 /* Grammar rules */
@@ -736,6 +737,8 @@ VARY STRING DOUBLE DOUBLE DOUBLE DOUBLE
   op[lastop].op.vary.start_val = $5;
   op[lastop].op.vary.end_val = $6;
   op[lastop].op.vary.easing = nullptr;
+  op[lastop].op.vary.points = nullptr;
+
   lastop++;
 }|
 VARY STRING DOUBLE DOUBLE DOUBLE DOUBLE STRING
@@ -748,6 +751,27 @@ VARY STRING DOUBLE DOUBLE DOUBLE DOUBLE STRING
   op[lastop].op.vary.start_val = $5;
   op[lastop].op.vary.end_val = $6;
   op[lastop].op.vary.easing = $7;
+  op[lastop].op.vary.easing = (char *) malloc(sizeof(char)*255);
+  strcpy(op[lastop].op.vary.easing, $7);
+  op[lastop].op.vary.points = nullptr;
+
+  lastop++;
+}|
+VARY STRING DOUBLE DOUBLE DOUBLE DOUBLE STRING STRING
+{
+  lineno++;
+  op[lastop].opcode = VARY;
+  op[lastop].op.vary.p = s->add_symbol($2,SYM_VALUE,0);
+  op[lastop].op.vary.start_frame = $3;
+  op[lastop].op.vary.end_frame = $4;
+  op[lastop].op.vary.start_val = $5;
+  op[lastop].op.vary.end_val = $6;
+
+  op[lastop].op.vary.easing = (char *) malloc(sizeof(char)*255);
+  op[lastop].op.vary.points = (char *) malloc(sizeof(char)*255);
+  strcpy(op[lastop].op.vary.easing, $7);
+  strcpy(op[lastop].op.vary.points, $8);
+
   lastop++;
 }|
 SHADING SHADING_TYPE

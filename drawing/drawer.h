@@ -20,6 +20,7 @@
 #define SHADING_FLAT 1337
 #define SHADING_GOURAUD 2019
 #define SHADING_PHONG 2024
+#define SHADING_WIREFRAME 4200
 
 class Drawer : public Display {
 public:

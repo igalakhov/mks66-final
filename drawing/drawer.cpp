@@ -69,7 +69,6 @@ void Drawer::draw_polygons(TriangleMatrix *m, std::vector<double **> &sources, s
 //            cur_color.g = (unsigned char)(std::rand() % 255);
 //            cur_color.b = (unsigned char)(std::rand() % 255);
 
-
             if(shading_type == SHADING_FLAT)
                 scan_line(s + 0, s + 4, s + 8);
 
@@ -79,9 +78,11 @@ void Drawer::draw_polygons(TriangleMatrix *m, std::vector<double **> &sources, s
             if(shading_type == SHADING_GOURAUD)
                 scan_line_gouraund(m, sources, ambient, cons, s + 0, s + 4, s + 8);
 
-//            draw_line_wu(s[0], s[1], s[2],  s[4],  s[5], s[6]);
-//            draw_line_wu( s[4],  s[5], s[6],  s[8],  s[9], s[10]);
-//            draw_line_wu( s[0],  s[1], s[2],  s[8],  s[9], s[10]);
+            if(shading_type == SHADING_WIREFRAME) {
+                draw_line_simon(s[0], s[1], s[2], s[4], s[5], s[6]);
+                draw_line_simon(s[4], s[5], s[6], s[8], s[9], s[10]);
+                draw_line_simon(s[0], s[1], s[2], s[8], s[9], s[10]);
+            }
 
         }
 
@@ -93,6 +94,7 @@ void Drawer::draw_polygons(TriangleMatrix *m, std::vector<double **> &sources, s
 
 void Drawer::set_shading(int t) {
     switch(t){
+        case SHADING_WIREFRAME:
         case SHADING_FLAT:
         case SHADING_GOURAUD:
         case SHADING_PHONG: {
@@ -280,16 +282,18 @@ void Drawer::scan_line_phong(TriangleMatrix *m, std::vector<double **> &sources,
 
             dx1 = 0, dz1 = 0;
 
+            v1[0] = p1v[0];
+            v1[1] = p1v[1];
+            v1[2] = p1v[2];
+
+            dv1[0] = dv1[1] = dv1[2] = 0;
+
             if (d2 != 0) {
                 dx1 = (p2[0] - p1[0]) / d2;
 
                 dv1[0] = (p2v[0] - p1v[0])/d2;
                 dv1[1] = (p2v[1] - p1v[1])/d2;
                 dv1[2] = (p2v[2] - p1v[2])/d2;
-
-                v1[0] = p1v[0];
-                v1[1] = p1v[1];
-                v1[2] = p1v[2];
 
                 // color here
 
@@ -354,8 +358,8 @@ void Drawer::draw_line_color(float_mat x0, int y0, double z0, floating_color &c0
 
             //printf("%f, %f, %f\n", cc.r, cc.g, cc.b);
 
-            assert(cc.r < 255 and cc.g < 255 and cc.b < 255);
-            assert(cc.r > 0 and cc.g > 0 and cc.b > 0);
+            //assert(cc.r <= 255 and cc.g <= 255 and cc.b <= 255);
+            //assert(cc.r >= 0 and cc.g >= 0 and cc.b >= 0);
         }
 
 //        cc.r -= dc.r;

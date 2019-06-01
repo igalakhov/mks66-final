@@ -51,8 +51,8 @@ void my_main() {
     // with that being said, do a second pass
     second_pass();
 
-    third_pass();
 
+    third_pass();
 
     // print delta list
 //    for(int i = 0; i < num_frames; i++){
@@ -162,7 +162,12 @@ void second_pass(){
                 double prev = cur.op.vary.start_val;
 
                 // figure out which function we need
-                int easing_function = SINE_IN;
+                int easing_function = get_easing_func(cur.op.vary.easing, cur.op.vary.points);
+
+                //printf("%s, %s\n", cur.op.vary.easing, cur.op.vary.points);
+
+                //printf("%d\n", easing_function);
+
 
                 for(int j = (int)std::round(cur.op.vary.start_frame); j <= (int)std::round(cur.op.vary.end_frame); j++){
 
@@ -174,7 +179,8 @@ void second_pass(){
 
                     // calculate value
 
-                    double val = Sine::easeInOut(t, b, c, d);
+
+                    double val = get_easing(t, b, c, d, easing_function);
 
 //                    std::printf("val: %f\n", val);
 ////                    std::printf("prev: %f\n", prev);
@@ -482,6 +488,8 @@ void render_frame(int frame) {
                     drawer->set_shading(SHADING_GOURAUD);
                 } else if(!strcmp(cur.op.shading.p->name, "phong")){
                     drawer->set_shading(SHADING_PHONG);
+                } else if(!strcmp(cur.op.shading.p->name, "wireframe")){
+                    drawer->set_shading(SHADING_WIREFRAME);
                 }
 
                 break;

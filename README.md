@@ -5,14 +5,30 @@ Name: Ivan Galakhov
 Team Name: Ivan Galakhov
 
 
+### new command
+vary [knob] [start frame] [end frame] [start value] [end value] [easing function] [easing function endpoints]
+
+easing function can be: [back, bounce, circ, cubic, elastic, expo, linear, quad, quart, quint, and sine]
+
+easing function endpoints can be: [in, out, inout]
+
+[linear inout] is the default
+
+
 ### features implemented
 * Gouraund shading [done]
 * Phong shading [done]
 * MDL shading commands [done]
 * Multiple light sources [done]
+* More easing functions that can be specified from the mdl file [done]
+
 
 ### features wishlist
 * OBJ file parsing (with mtl material files)
-* More easing functions that can be specified from the mdl file
 * Tweens (???)
 * Possibly camera and focal operations (???)
+
+
+NOTE: this project uses easing functions taken from here:
+
+https://github.com/jesusgollonet/ofpennereasing/tree/master/PennerEasing

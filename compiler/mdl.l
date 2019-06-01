@@ -48,8 +48,9 @@ ID [a-zA-Z][a-zA-Z0-9_]*
 
 "shading" {return SHADING;}
 
-phong|flat|gouraud|raytrace|wireframe {
+phong|flat|gouraud|wireframe {
 strcpy(yylval.string, yytext); return SHADING_TYPE;}
+
 
 "setknobs" {return SETKNOBS;}
 "focal" {return FOCAL;}
