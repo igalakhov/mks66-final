@@ -33,15 +33,8 @@ void render_frame(int);
 
 void my_main() {
 
-    auto d = new Drawer();
-
-    //d->draw_line_wu(0, 0, 0, 300, 400, 0);
-    //d->draw_line_wu(100, 400.5, 0, 100, 100.5, 0);
-
-    //d->display();
 
 
-    //return;
     first_pass();
 
 
@@ -479,6 +472,21 @@ void render_frame(int frame) {
                 break;
             }
 
+            case SHADING: {
+
+                //printf("%s\n", cur.op.shading.p->name);
+
+                if(!strcmp(cur.op.shading.p->name, "flat")){
+                    drawer->set_shading(SHADING_FLAT);
+                } else if(!strcmp(cur.op.shading.p->name, "gouraud")){
+                    drawer->set_shading(SHADING_GOURAUD);
+                } else if(!strcmp(cur.op.shading.p->name, "phong")){
+                    drawer->set_shading(SHADING_PHONG);
+                }
+
+                break;
+            }
+
                 // stuff we don't need to do anything for since the parser and lexer do it for us
             case VARY:
             case BASENAME:
@@ -516,6 +524,7 @@ void render_frame(int frame) {
     std::string buffAsStdStr = buff;
     //std::cout << "anim/" + basename + "" + buffAsStdStr + ".png" << std::endl;
 
-    drawer->save("anim/" + basename + "" + buffAsStdStr + ".png", "dummy");
+    if(num_frames > 1)
+        drawer->save("anim/" + basename + "" + buffAsStdStr + ".png", "dummy");
 }
 

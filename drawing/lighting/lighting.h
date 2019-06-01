@@ -15,12 +15,15 @@ struct floating_color { // floating point color for in between calculations. onl
 };
 
 color * total_lighting(float_mat *, std::vector<double **> &, struct floating_color *, struct constants *);
+floating_color * total_lighting_no_round(float_mat *, std::vector<double **> &, struct floating_color *, struct constants *);
 
 floating_color * single_lighting(float_mat *, double **, struct constants *);
 
 floating_color * calculate_ambient(struct floating_color *, struct constants *);
 floating_color * calculate_diffuse(float_mat *, double **, struct constants *);
 floating_color * calculate_specular(float_mat *, double **, struct constants *);
+
+color * to_normal_color(floating_color &);
 
 void multiply_through(floating_color *, float_mat *);
 void copy_color(floating_color *, float_mat *);

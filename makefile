@@ -9,7 +9,7 @@ OBJECTS=$(BUILD_FOLDER)/main.o $(BUILD_FOLDER)/drawer.o $(BUILD_FOLDER)/display.
 all: prepare $(BUILD_FOLDER)/bison_parser.o $(BUILD_FOLDER)/flex_lexer.o $(OBJECTS)
 	g++ -o mdl.out $(OBJECTS) $(BUILD_FOLDER)/bison_parser.o $(BUILD_FOLDER)/flex_lexer.o -ll
 	clear
-	./mdl.out alias.mdl
+	./mdl.out scripts/shading_demo.mdl
 
 prepare:
 	mkdir -p build

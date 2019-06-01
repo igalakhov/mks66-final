@@ -18,6 +18,16 @@ float_mat * normalize(float_mat * vec){
 
 }
 
+float_mat * empty_vector(){
+    auto ret = new float_mat[3];
+
+    ret[0] = 0;
+    ret[1] = 0;
+    ret[2] = 0;
+
+    return ret;
+}
+
 void normalize_in_place(float_mat * vec){
     double len = sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
 

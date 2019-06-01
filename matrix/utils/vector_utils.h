@@ -15,5 +15,6 @@ void normalize_in_place(float_mat *);
 void scalar_mult(float_mat *, float_mat);
 void subtract(float_mat *, float_mat *);
 void add(float_mat *, float_mat *);
+float_mat * empty_vector();
 
 #endif //WORK_01_LINE_VECTOR_UTILS_H

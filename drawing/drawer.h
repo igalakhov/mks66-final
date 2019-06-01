@@ -17,6 +17,10 @@
 #include "../matrix/utils/vector_utils.h"
 #include "lighting/lighting.h"
 
+#define SHADING_FLAT 1337
+#define SHADING_GOURAUD 2019
+#define SHADING_PHONG 2024
+
 class Drawer : public Display {
 public:
     Drawer(); // constructor
@@ -33,8 +37,21 @@ public:
     void draw_line_steep(int, int, float_mat, int, int, float_mat, int, int, int);
     void draw_line_shallow(int, int, float_mat, int, int, float_mat, int, int, int);
     void scan_line(float_mat *, float_mat *, float_mat *);
+    void scan_line_gouraund(TriangleMatrix *, std::vector<double **> &, floating_color *, constants *,
+            float_mat *, float_mat *, float_mat *);
+    void draw_line_color(float_mat, int, float_mat, floating_color &,
+                        float_mat, int, float_mat, floating_color &);
+
+    void draw_line_vector(float_mat, int, float_mat, float_mat *,
+                          float_mat, int, float_mat, float_mat *,
+                          std::vector<double **> &, floating_color *, constants *);
+
+    void scan_line_phong(TriangleMatrix *, std::vector<double **> &, floating_color *, constants *,
+                         float_mat *, float_mat *, float_mat *);
     void change_color(unsigned char, unsigned char, unsigned char);
     void set(float_mat, float_mat, float_mat); // set a specific point to the current color
+
+    void set_shading(int);
 
 
     // anti aliasing algo
@@ -46,12 +63,16 @@ public:
 
 
 
+
+
 protected:
 
 private:
     struct color cur_color; // current drawing color
 
     float_mat * z_buffer;
+
+    int shading_type;
 };
 
 

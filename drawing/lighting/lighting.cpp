@@ -4,6 +4,49 @@
 
 #include "lighting.h"
 
+
+floating_color * total_lighting_no_round(float_mat *normal, std::vector<double **> &sources,
+        struct floating_color * ambient_color, struct constants * cons){
+
+
+    float r = 0;
+    float g = 0;
+    float b = 0;
+    floating_color * cur_color;
+//    for(int i = 0; i < 3; i++){
+//        //cur = single_lighting(normal, light[i]);
+////        r += cur->r;
+////        g += cur->g;
+////        b += cur->b;
+//    }
+
+
+    for(double ** cur_source : sources){
+        cur_color = single_lighting(normal, cur_source, cons);
+        r += cur_color->r;
+        g += cur_color->g;
+        b += cur_color->b;
+    }
+
+    // add ambient only once
+    floating_color *ambient = calculate_ambient(ambient_color, cons);
+    r += ambient->r;
+    g += ambient->g;
+    b += ambient->b;
+
+
+    auto ret  = (floating_color * ) std::malloc(sizeof(floating_color));
+
+    ret->r = constrain(r, 0, 255);
+    ret->g = constrain(g, 0, 255);
+    ret->b = constrain(b, 0, 255);
+
+    //printf("%f, %f, %f\n", ret->r, ret->g, ret->b);
+
+    return ret;
+
+}
+
 color *total_lighting(float_mat *normal, std::vector<double **> &sources, struct floating_color * ambient_color, struct constants * cons){
     float r = 0;
     float g = 0;
@@ -27,7 +70,9 @@ color *total_lighting(float_mat *normal, std::vector<double **> &sources, struct
     g += ambient->g;
     b += ambient->b;
 
+
     auto ret = (color *) malloc(sizeof(color));
+
     ret->r = (unsigned char) constrain(r, 0, 255);
     ret->g = (unsigned char) constrain(g, 0, 255);
     ret->b = (unsigned char) constrain(b, 0, 255);
@@ -190,4 +235,14 @@ float_mat constrain(float_mat val, float_mat lo, float_mat hi) {
     if (val > hi)
         return hi;
     return val;
+}
+
+color * to_normal_color(floating_color &in){
+    auto ret = (color *) std::malloc(sizeof(color));
+
+    ret->r = (unsigned char) constrain(std::round(in.r), 0, 255);
+    ret->g = (unsigned char) constrain(std::round(in.g), 0, 255);
+    ret->b = (unsigned char) constrain(std::round(in.b), 0, 255);
+
+    return ret;
 }

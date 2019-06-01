@@ -16,6 +16,7 @@ ID [a-zA-Z][a-zA-Z0-9_]*
 \-?\.[0-9]+ { yylval.val = atof(yytext);return DOUBLE;}
 
 "//".* { return COMMENT;}
+"#".* {return COMMENT;}
 
 "light" {return LIGHT;}
 "constants" {return CONSTANTS;}

@@ -1,0 +1,33 @@
+light l0 -0.5 0.5 0.75 255 100 0
+light l1 0.5 -0.5 0.75 0 0 50
+
+shading flat
+
+move 250 250 0
+
+shading flat
+push
+move -140 -70 0
+#### STUFF
+sphere 0 0 0 100
+#### END STUFF
+pop
+
+shading gouraud
+push
+move 140 -70 0
+#### STUFF
+sphere 0 0 0 100
+#### END STUFF
+pop
+
+shading phong
+push
+move 0 150 0
+#### STUFF
+sphere 0 0 0 100
+#### END STUFF
+pop
+
+
+display

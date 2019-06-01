@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <thread>
+#include <unordered_map>
+#include "utils/vector_utils.h"
 #include "math.h"
 
 #include "unit_matrix.h"
@@ -19,6 +21,13 @@ public:
     TriangleMatrix();
 
     void add_triangle(float_mat, float_mat, float_mat, float_mat, float_mat, float_mat, float_mat, float_mat, float_mat);
+    void make_vertex_normals();
+    unsigned long getkey(float_mat, float_mat, float_mat);
+    float_mat * get_vertex_normal(float_mat *);
+    void normalize_vertex_normals(); // normalizes all vertex stuff
+
+    // list of normals
+    std::unordered_map<unsigned long,float_mat *> vertex_normals;
 };
 
 #endif //WORK_01_LINE_TRIANGLE_MATRIX_H
