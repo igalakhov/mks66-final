@@ -32,6 +32,9 @@ void render_frame(int);
 
 
 void my_main() {
+    OBJFileParser::get_materials("meshes/box_stack.mtl");
+
+    return;
 
 
 

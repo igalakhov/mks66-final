@@ -1,6 +1,7 @@
 /* Initial C code */
 %{
 #include "../build/mdl.tab.hh"
+#pragma GCC diagnostic ignored "-Wdeprecated-register" // lol
 %}
 
 

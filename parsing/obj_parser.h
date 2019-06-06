@@ -10,13 +10,23 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <unordered_map>
 
 #include "../settings.h"
 #include "../matrix/edge_matrix.h"
 #include "../matrix/triangle_matrix.h"
+#include "../drawing/drawer.h"
 
 class OBJFileParser {
 public:
+    // currently supports
+    // ambient, diffuse, and specular coefficients, and the specular exponent
+    // everything else is ignored
+    static void draw_file(const char *, Drawer *, std::vector<double **> &, floating_color *, constants *);
+    static std::unordered_map<std::string, constants *> get_materials(const char *);
+    static constants * new_material();
+
+
     OBJFileParser(std::string);
     ~OBJFileParser();
 

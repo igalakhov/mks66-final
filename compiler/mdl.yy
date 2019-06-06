@@ -7,6 +7,7 @@
 #include "../compiler/parser.h"
 #include "../matrix/transformation_matrix.h"
 #include "../compiler/symbol_table.h"
+#pragma GCC diagnostic ignored "-Wdeprecated-register" // lol
 
 #define YYERROR_VERBOSE 1
 
