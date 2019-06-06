@@ -11,7 +11,7 @@ FLAGS=-Wunsequenced
 
 all: prepare $(BUILD_FOLDER)/bison_parser.o $(BUILD_FOLDER)/flex_lexer.o $(OBJECTS)
 	g++ $(FLAGS) -o mdl.out $(OBJECTS) $(BUILD_FOLDER)/bison_parser.o $(BUILD_FOLDER)/flex_lexer.o -ll
-	./mdl.out scripts/tween_demo.mdl
+	./mdl.out scripts/phong_demo.mdl
 
 prepare:
 	mkdir -p build
@@ -82,7 +82,7 @@ $(BUILD_FOLDER)/parser.o: compiler/parser.cpp settings.h
 	g++ $(FLAGS) -std=c++11 -o $(BUILD_FOLDER)/parser.o -c compiler/parser.cpp
 
 $(BUILD_FOLDER)/easing.o: drawing/animation/easing.cpp settings.h
-	g++ $(FLAGS) -std=c++11 -o $(BUILD_FOLDER)/easing.o -c drawing/easing.cpp
+	g++ $(FLAGS) -std=c++11 -o $(BUILD_FOLDER)/easing.o -c drawing/animation/easing.cpp
 
 $(BUILD_FOLDER)/knob_list.o: drawing/animation/knob_list.cpp settings.h
 	g++ $(FLAGS) -std=c++11 -o $(BUILD_FOLDER)/knob_list.o -c drawing/animation/knob_list.cpp

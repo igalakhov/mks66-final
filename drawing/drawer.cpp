@@ -140,7 +140,15 @@ void Drawer::draw_line_vector(float_mat x0, int y0, double z0, float_mat * n0,
 
         for (int x = x0i; x <= x1i; x++) {
 
-            cur_color = *total_lighting(cv, sources, ambient, cons);
+            float_mat * cvc = empty_vector();
+
+            cvc[0] = cv[0];
+            cvc[1] = cv[1];
+            cvc[2] = cv[2];
+
+            normalize_in_place(cvc);
+
+            cur_color = *total_lighting(cvc, sources, ambient, cons);
 
             set(x, y0, curz);
 
@@ -168,9 +176,19 @@ void Drawer::draw_line_vector(float_mat x0, int y0, double z0, float_mat * n0,
 
 
     // set endpoints
-    cur_color = *total_lighting(n0, sources, ambient, cons);
+    float_mat * n0c = empty_vector();
+    n0c[0] = n0[0];
+    n0c[1] = n0[1];
+    n0c[2] = n0[2];
+    normalize_in_place(n0c);
+    cur_color = *total_lighting(n0c, sources, ambient, cons);
     set(x0, y0, z0);
-    cur_color = *total_lighting(n1, sources, ambient, cons);
+    float_mat * n1c = empty_vector();
+    n1c[0] = n1[0];
+    n1c[1] = n1[1];
+    n1c[2] = n1[2];
+    normalize_in_place(n1c);
+    cur_color = *total_lighting(n1c, sources, ambient, cons);
     set(x1, y1, z1);
 
 

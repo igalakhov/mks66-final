@@ -149,14 +149,14 @@ void print_pcode()
                 printf("Basename: %s",op[i].op.basename.p->name);
                 break;
             case SAVE_KNOBS:
-                printf("Save knobs: %s",op[i].op.save_knobs.p->name);
+                //printf("Save knobs: %s",op[i].op.save_knobs.p->name);
                 break;
             case TWEEN:
-                printf("Tween: %4.0f %4.0f, %s %s",
-                       op[i].op.tween.start_frame,
-                       op[i].op.tween.end_frame,
-                       op[i].op.tween.knob_list0->name,
-                       op[i].op.tween.knob_list1->name);
+//                printf("Tween: %4.0f %4.0f, %s %s",
+//                       op[i].op.tween.start_frame,
+//                       op[i].op.tween.end_frame,
+//                       op[i].op.tween.knob_list0->name,
+//                       //op[i].op.tween.knob_list1->name);
                 break;
             case FRAMES:
                 printf("Num frames: %4.0f",op[i].op.frames.num_frames);
