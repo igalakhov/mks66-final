@@ -24,7 +24,6 @@ public:
     void make_vertex_normals();
     unsigned long getkey(float_mat, float_mat, float_mat);
     float_mat * get_vertex_normal(float_mat *);
-    void normalize_vertex_normals(); // normalizes all vertex stuff
 
     // list of normals
     std::unordered_map<unsigned long,float_mat *> vertex_normals;

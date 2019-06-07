@@ -21,11 +21,11 @@ void Drawer::draw_points(PointMatrix *m) {
 
 // draw polygons with ambient and constants
 void Drawer::draw_polygons(TriangleMatrix *m, std::vector<double **> &sources, struct floating_color *ambient,
-                           struct constants *cons) {
+                           struct constants *cons, bool calc_normals) {
 
 
     // only do this if using PHONG or GOURAUND, not FLAT
-    if(shading_type == SHADING_PHONG or shading_type == SHADING_GOURAUD)
+    if(calc_normals and (shading_type == SHADING_PHONG or shading_type == SHADING_GOURAUD))
         m->make_vertex_normals();
 
     // isolates the exact point there is a problem

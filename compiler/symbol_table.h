@@ -33,6 +33,7 @@ struct constants
     double g[4];
     double b[4];
     double red,green,blue;
+    double exp;
 };
 
 struct light

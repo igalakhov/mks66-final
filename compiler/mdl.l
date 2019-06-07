@@ -60,7 +60,7 @@ strcpy(yylval.string, yytext); return SHADING_TYPE;}
 
 ":" {return CO;}
 
-[a-zA-Z][\.a-zA-Z0-9_]* {
+[a-zA-Z][/\.a-zA-Z0-9_]* {
 strcpy(yylval.string, yytext); return STRING;}
 
 

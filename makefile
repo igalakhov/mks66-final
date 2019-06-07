@@ -11,7 +11,7 @@ FLAGS=-std=c++11
 
 all: prepare $(BUILD_FOLDER)/bison_parser.o $(BUILD_FOLDER)/flex_lexer.o $(OBJECTS)
 	g++ $(FLAGS) -o mdl.out $(OBJECTS) $(BUILD_FOLDER)/bison_parser.o $(BUILD_FOLDER)/flex_lexer.o -ll
-	./mdl.out scripts/phong_demo.mdl
+	./mdl.out scripts/mesh_test.mdl
 
 prepare:
 	mkdir -p build

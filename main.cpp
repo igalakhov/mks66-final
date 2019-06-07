@@ -17,7 +17,7 @@
 
 
 // TODO: move this to parser.h
-static struct vary_node ** knobs;
+static struct vary_node **knobs;
 static std::string basename = "myanimation";
 static int num_frames = 1;
 static bool animate = 0;
@@ -32,16 +32,10 @@ void render_frame(int);
 
 
 void my_main() {
-    OBJFileParser::get_materials("meshes/box_stack.mtl");
-
-    return;
-
-
 
     first_pass();
 
-
-    if(num_frames > 1) {
+    if (num_frames > 1) {
         std::printf("Generating animation with %d frames, with basename %s\n", num_frames, basename.c_str());
         std::system("mkdir -p anim");
         animate = true;
@@ -71,7 +65,7 @@ void my_main() {
 
 
     // convert to a gif if necessary
-    if(num_frames > 1){
+    if (num_frames > 1) {
         // frame conversion code here
         std::system(("convert -delay 1.7 anim/" + basename + "* " + basename + ".gif").c_str());
         std::system("rm -rf anim");
@@ -85,13 +79,13 @@ void my_main() {
 
 }
 
-void third_pass(){
-    for(int frame = 0; frame < num_frames; frame++){
+void third_pass() {
+    for (int frame = 0; frame < num_frames; frame++) {
         std::printf("Generating Frame #%d\n", frame);
 
         // update symbol table
-        struct vary_node * cur = knobs[frame];
-        while(cur != nullptr){
+        struct vary_node *cur = knobs[frame];
+        while (cur != nullptr) {
 //            printf("??\n");
             s->lookup_symbol(cur->name)->s.val = cur->value;
             cur = cur->next;
@@ -104,21 +98,21 @@ void third_pass(){
     }
 }
 
-void add_value(vary_node **knobs, int frame, char *name, double delta){
-    if(frame < 0 or frame >= num_frames) // don't do anything for invalid frames
+void add_value(vary_node **knobs, int frame, char *name, double delta) {
+    if (frame < 0 or frame >= num_frames) // don't do anything for invalid frames
         return;
 
     assert(0 <= frame and frame < num_frames); // so we don't get a weird null pointer
-    vary_node * cur = knobs[frame];
+    vary_node *cur = knobs[frame];
 
     // new node
-    auto new_node = (struct vary_node * ) malloc(sizeof(struct vary_node));
+    auto new_node = (struct vary_node *) malloc(sizeof(struct vary_node));
 
     new_node->name = name;
     new_node->next = nullptr;
     new_node->value = delta;
 
-    if(cur == nullptr) {
+    if (cur == nullptr) {
         knobs[frame] = new_node;
     } else {
         while (cur->next != nullptr)
@@ -128,11 +122,12 @@ void add_value(vary_node **knobs, int frame, char *name, double delta){
 
 }
 
-void add_vary(char * name, int start_frame, int end_frame, double start_val, double end_val, char * easing, char * points){
-    if(start_frame == end_frame)
+void
+add_vary(char *name, int start_frame, int end_frame, double start_val, double end_val, char *easing, char *points) {
+    if (start_frame == end_frame)
         return;
 
-    double delta = (end_val - start_val)/(end_frame - start_frame);
+    double delta = (end_val - start_val) / (end_frame - start_frame);
 
     int t = 0;
     double b = start_val;
@@ -143,7 +138,7 @@ void add_vary(char * name, int start_frame, int end_frame, double start_val, dou
     int easing_function = get_easing_func(easing, points);
 
 
-    for(int j = (int)std::round(start_frame); j <= (int)std::round(end_frame); j++){
+    for (int j = (int) std::round(start_frame); j <= (int) std::round(end_frame); j++) {
 
 
         double val = get_easing(t, b, c, d, easing_function);
@@ -154,10 +149,10 @@ void add_vary(char * name, int start_frame, int end_frame, double start_val, dou
     }
 }
 
-void second_pass(){
-    knobs = (struct vary_node **)calloc((size_t) num_frames, sizeof(struct vary_node *));
+void second_pass() {
+    knobs = (struct vary_node **) calloc((size_t) num_frames, sizeof(struct vary_node *));
     // set all knobs to null
-    for(int i = 0; i < num_frames; i++)
+    for (int i = 0; i < num_frames; i++)
         knobs[i] = nullptr;
 
     // look for vary commands
@@ -169,9 +164,9 @@ void second_pass(){
         struct command cur = op[i];
         switch (cur.opcode) {
 
-            case SET:{
-              s->lookup_symbol(cur.op.set.p->name)->s.val = cur.op.set.val;
-              break;
+            case SET: {
+                s->lookup_symbol(cur.op.set.p->name)->s.val = cur.op.set.val;
+                break;
             };
 
             case SAVE_KNOBS: {
@@ -181,26 +176,28 @@ void second_pass(){
 
             case TWEEN: {
 
-                if(s->lookup_symbol(cur.op.tween.knob_list0) == nullptr)
+                if (s->lookup_symbol(cur.op.tween.knob_list0) == nullptr)
                     printf("ERROR: Unrecognized knob list [%s]\n", cur.op.tween.knob_list0);
 
-                if(s->lookup_symbol(cur.op.tween.knob_list1) == nullptr)
+                if (s->lookup_symbol(cur.op.tween.knob_list1) == nullptr)
                     printf("ERROR: Unrecognized knob list [%s]\n", cur.op.tween.knob_list1);
 
-                if(s->lookup_symbol(cur.op.tween.knob_list0) == nullptr or s->lookup_symbol(cur.op.tween.knob_list1) == nullptr){
+                if (s->lookup_symbol(cur.op.tween.knob_list0) == nullptr or
+                    s->lookup_symbol(cur.op.tween.knob_list1) == nullptr) {
                     printf("Tween will be ignored\n");
                     continue;
                 }
 
-                KnobList * first = s->lookup_symbol(cur.op.tween.knob_list0)->s.k;
-                KnobList * second = s->lookup_symbol(cur.op.tween.knob_list1)->s.k;
+                KnobList *first = s->lookup_symbol(cur.op.tween.knob_list0)->s.k;
+                KnobList *second = s->lookup_symbol(cur.op.tween.knob_list1)->s.k;
 
 //                first->print();
 //                second->print();
 
-                for(auto & k : first->vals){
-                    add_vary(k.first, (int) std::round(cur.op.tween.start_frame), (int) std::round(cur.op.tween.end_frame),
-                            k.second, second->vals[k.first], cur.op.tween.easing, cur.op.tween.points);
+                for (auto &k : first->vals) {
+                    add_vary(k.first, (int) std::round(cur.op.tween.start_frame),
+                             (int) std::round(cur.op.tween.end_frame),
+                             k.second, second->vals[k.first], cur.op.tween.easing, cur.op.tween.points);
                     //printf("%s: %f to %f\n", k.first, k.second, second->vals[k.first]);
                 }
 
@@ -211,12 +208,12 @@ void second_pass(){
 
             case VARY: {
 
-                  add_vary(cur.op.vary.p->name, (int) std::round(cur.op.vary.start_frame),
-                           (int) std::round(cur.op.vary.end_frame),
-                           std::round(cur.op.vary.start_val),
-                           std::round(cur.op.vary.end_val),
-                           cur.op.vary.easing,
-                           cur.op.vary.points);
+                add_vary(cur.op.vary.p->name, (int) std::round(cur.op.vary.start_frame),
+                         (int) std::round(cur.op.vary.end_frame),
+                         std::round(cur.op.vary.start_val),
+                         std::round(cur.op.vary.end_val),
+                         cur.op.vary.easing,
+                         cur.op.vary.points);
 
 ////                std::printf("%s: frame %d to %d, vary %d to %d\n", cur.op.vary.p->name,
 //                            (int) std::round(cur.op.vary.start_frame),
@@ -360,9 +357,9 @@ void render_frame(int frame) {
                 );
                 triangle_matrix->apply_transformation(cord_stack->peek());
                 if (cur.op.torus.constants != nullptr)
-                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, cur.op.torus.constants->s.c);
+                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, cur.op.torus.constants->s.c, true);
                 else
-                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, default_constants);
+                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, default_constants, true);
                 triangle_matrix->clear();
                 break;
             }
@@ -379,9 +376,9 @@ void render_frame(int frame) {
                 );
                 triangle_matrix->apply_transformation(cord_stack->peek());
                 if (cur.op.box.constants != nullptr)
-                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, cur.op.box.constants->s.c);
+                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, cur.op.box.constants->s.c, true);
                 else
-                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, default_constants);
+                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, default_constants, true);
                 triangle_matrix->clear();
                 break;
             }
@@ -397,9 +394,9 @@ void render_frame(int frame) {
                 } else
                     triangle_matrix->apply_transformation(cord_stack->peek());
                 if (cur.op.sphere.constants != nullptr)
-                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, cur.op.sphere.constants->s.c);
+                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, cur.op.sphere.constants->s.c, true);
                 else
-                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, default_constants);
+                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, default_constants, true);
                 triangle_matrix->clear();
                 break;
             }
@@ -425,7 +422,7 @@ void render_frame(int frame) {
                 // stacks and transformations
             case MOVE: {
                 double delta = 1;
-                if(cur.op.move.p != nullptr)
+                if (cur.op.move.p != nullptr)
                     delta = cur.op.move.p->s.val;
                 cord_stack->apply_transformation(TransformationMatrix::translation(
                         cur.op.move.d[0] * delta,
@@ -437,18 +434,21 @@ void render_frame(int frame) {
 
             case ROTATE: {
                 double delta = 1;
-                if(cur.op.rotate.p != nullptr)
+                if (cur.op.rotate.p != nullptr)
                     delta = cur.op.rotate.p->s.val;
 
                 switch ((int) std::round(cur.op.rotate.axis)) {
                     case 0:
-                        cord_stack->apply_transformation(TransformationMatrix::rotationX(cur.op.rotate.degrees * delta));
+                        cord_stack->apply_transformation(
+                                TransformationMatrix::rotationX(cur.op.rotate.degrees * delta));
                         break;
                     case 1:
-                        cord_stack->apply_transformation(TransformationMatrix::rotationY(cur.op.rotate.degrees * delta));
+                        cord_stack->apply_transformation(
+                                TransformationMatrix::rotationY(cur.op.rotate.degrees * delta));
                         break;
                     case 2:
-                        cord_stack->apply_transformation(TransformationMatrix::rotationZ(cur.op.rotate.degrees * delta));
+                        cord_stack->apply_transformation(
+                                TransformationMatrix::rotationZ(cur.op.rotate.degrees * delta));
                         break;
                     default:
                         break;
@@ -458,7 +458,7 @@ void render_frame(int frame) {
 
             case SCALE: {
                 double delta = 1;
-                if(cur.op.scale.p != nullptr)
+                if (cur.op.scale.p != nullptr)
                     delta = cur.op.scale.p->s.val;
 
                 cord_stack->apply_transformation(TransformationMatrix::dilation(
@@ -522,7 +522,7 @@ void render_frame(int frame) {
             }
 
             case DISPLAY: {
-                if(!animate)
+                if (!animate)
                     drawer->display();
                 break;
             }
@@ -536,13 +536,13 @@ void render_frame(int frame) {
 
                 //printf("%s\n", cur.op.shading.p->name);
 
-                if(!strcmp(cur.op.shading.p->name, "flat")){
+                if (!strcmp(cur.op.shading.p->name, "flat")) {
                     drawer->set_shading(SHADING_FLAT);
-                } else if(!strcmp(cur.op.shading.p->name, "gouraud")){
+                } else if (!strcmp(cur.op.shading.p->name, "gouraud")) {
                     drawer->set_shading(SHADING_GOURAUD);
-                } else if(!strcmp(cur.op.shading.p->name, "phong")){
+                } else if (!strcmp(cur.op.shading.p->name, "phong")) {
                     drawer->set_shading(SHADING_PHONG);
-                } else if(!strcmp(cur.op.shading.p->name, "wireframe")){
+                } else if (!strcmp(cur.op.shading.p->name, "wireframe")) {
                     drawer->set_shading(SHADING_WIREFRAME);
                 }
 
@@ -565,15 +565,16 @@ void render_frame(int frame) {
 
                 // mesh
             case MESH: {
-                auto parser = new OBJFileParser(cur.op.mesh.name);
-                triangle_matrix = parser->get_triangle_matrix();
-                triangle_matrix->apply_transformation(cord_stack->peek());
-                if (cur.op.mesh.constants != nullptr)
-                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, cur.op.mesh.constants->s.c);
-                else
-                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, default_constants);
-
-                triangle_matrix->clear();
+                OBJFileParser::draw_file(cur.op.mesh.name, drawer, light_sources, &ambient, &white, cord_stack->peek());
+//                auto parser = new OBJFileParser(cur.op.mesh.name);
+//                triangle_matrix = parser->get_triangle_matrix();
+//                triangle_matrix->apply_transformation(cord_stack->peek());
+//                if (cur.op.mesh.constants != nullptr)
+//                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, cur.op.mesh.constants->s.c);
+//                else
+//                    drawer->draw_polygons(triangle_matrix, light_sources, &ambient, default_constants);
+//
+//                triangle_matrix->clear();
 
                 //yeah
                 break;
@@ -593,7 +594,7 @@ void render_frame(int frame) {
     std::string buffAsStdStr = buff;
     //std::cout << "anim/" + basename + "" + buffAsStdStr + ".png" << std::endl;
 
-    if(num_frames > 1)
+    if (num_frames > 1)
         drawer->save("anim/" + basename + "" + buffAsStdStr + ".png", "dummy");
 }
 

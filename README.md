@@ -12,7 +12,7 @@ easing function can be: [back, bounce, circ, cubic, elastic, expo, linear, quad,
 
 easing function endpoints can be: [in, out, inout]
 
-[linear inout] is the default
+[linear] [inout] is the default
 
 
 ### features implemented
@@ -22,10 +22,10 @@ easing function endpoints can be: [in, out, inout]
 * Multiple light sources
 * More easing functions that can be specified from the mdl file
 * Tweens (with easing functions)
+* OBJ file parsing (with mtl material files)
 
 
 ### features wishlist
-* OBJ file parsing (with mtl material files) [currently being worked on]
 * Possibly camera and focal operations (???)
 
 

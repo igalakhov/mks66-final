@@ -1,0 +1,6 @@
+move 250 250 0
+rotate x 180
+rotate z 180
+scale 200 200 200
+mesh fortnite :meshes/default_dance/dance_000000.obj
+display

@@ -73,12 +73,10 @@ void TriangleMatrix::make_vertex_normals() {
 float_mat * TriangleMatrix::get_vertex_normal(float_mat * s) {
     auto key = getkey(s[0], s[1], s[2]);
 
-    assert(vertex_normals.count(key) != 0);
+    if(vertex_normals.count(key) != 0)
+        return vertex_normals[key];
 
-
-
-
-    return vertex_normals[key];
+    return s;
 
 }
 

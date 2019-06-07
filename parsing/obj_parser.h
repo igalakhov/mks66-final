@@ -22,8 +22,9 @@ public:
     // currently supports
     // ambient, diffuse, and specular coefficients, and the specular exponent
     // everything else is ignored
-    static void draw_file(const char *, Drawer *, std::vector<double **> &, floating_color *, constants *);
+    static void draw_file(const char *, Drawer *, std::vector<double **> &, floating_color *, constants *, TransformationMatrix *);
     static std::unordered_map<std::string, constants *> get_materials(const char *);
+    static int get_first_int(std::string);
     static constants * new_material();
 
 
