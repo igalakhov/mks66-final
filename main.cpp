@@ -18,7 +18,7 @@
 
 // TODO: move this to parser.h
 static struct vary_node **knobs;
-static std::string basename = "myanimation";
+static std::string my_basename = "myanimation";
 static int num_frames = 1;
 static bool animate = 0;
 
@@ -36,13 +36,13 @@ void my_main() {
     first_pass();
 
     if (num_frames > 1) {
-        std::printf("Generating animation with %d frames, with basename %s\n", num_frames, basename.c_str());
+        std::printf("Generating animation with %d frames, with my_basename %s\n", num_frames, my_basename.c_str());
         std::system("mkdir -p anim");
         animate = true;
     } else
         std::printf("Generating single render\n");
 
-//    std::cout << basename << std::endl;
+//    std::cout << my_basename << std::endl;
 //    std::cout << numframes << std::endl;
 
     // with that being said, do a second pass
@@ -67,9 +67,9 @@ void my_main() {
     // convert to a gif if necessary
     if (num_frames > 1) {
         // frame conversion code here
-        std::system(("convert -delay 1.7 anim/" + basename + "* " + basename + ".gif").c_str());
+        std::system(("convert -delay 1.7 anim/" + my_basename + "* " + my_basename + ".gif").c_str());
         std::system("rm -rf anim");
-        std::system(("animate " + basename + ".gif").c_str());
+        std::system(("animate " + my_basename + ".gif").c_str());
 
     }
 
@@ -263,7 +263,7 @@ void second_pass() {
 }
 
 void first_pass() {
-    // find the basename and number of frames commands
+    // find the my_basename and number of frames commands
     for (int i = 0; i < lastop; i++) {
 
         //std::cout << "yes" << std::endl;
@@ -273,7 +273,7 @@ void first_pass() {
         switch (cur.opcode) {
 
             case BASENAME: {
-                basename = cur.op.basename.p->name;
+                my_basename = cur.op.basename.p->name;
                 break;
             }
 
@@ -592,9 +592,9 @@ void render_frame(int frame) {
     char buff[100];
     snprintf(buff, sizeof(buff), "%06d", frame);
     std::string buffAsStdStr = buff;
-    //std::cout << "anim/" + basename + "" + buffAsStdStr + ".png" << std::endl;
+    //std::cout << "anim/" + my_basename + "" + buffAsStdStr + ".png" << std::endl;
 
     if (num_frames > 1)
-        drawer->save("anim/" + basename + "" + buffAsStdStr + ".png", "dummy");
+        drawer->save("anim/" + my_basename + "" + buffAsStdStr + ".png", "dummy");
 }
 

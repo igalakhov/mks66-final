@@ -69,7 +69,7 @@ mesh [constants] :filename [coord_system]
 
 Knobs/Animation
 ---------------
-basename name		- sets the base filename to save under.
+my_basename name		- sets the base filename to save under.
 			  This should be used in conjunction with
 			  either vary or tween. For example,
 			  if "name" is R, then tween or vary might
@@ -81,7 +81,7 @@ save_knobs knoblist	- saves the current values of all knobs
 			  under the name "knoblist."
 
 tween start_frame end_frame knoblist0 knoblist1
-			- generates a number of frames using basename
+			- generates a number of frames using my_basename
 			  as the base filename. It will start from
 			  start_frame and end at end_frame and
 			  interpolate the image using knoblist0 as

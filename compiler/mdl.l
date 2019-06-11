@@ -36,7 +36,7 @@ ID [a-zA-Z][a-zA-Z0-9_]*
 "move" {return MOVE;}
 "scale" {return SCALE;}
 "rotate" {return ROTATE;}
-"basename" {return BASENAME;}
+"my_basename" {return BASENAME;}
 "save_knobs" {return SAVE_KNOBS;}
 "tween" {return TWEEN;}
 "frames" {return FRAMES;}
