@@ -25,7 +25,7 @@ void Drawer::draw_polygons(TriangleMatrix *m, std::vector<double **> &sources, s
 
 
     // only do this if using PHONG or GOURAUND, not FLAT
-    if(calc_normals and (shading_type == SHADING_PHONG or shading_type == SHADING_GOURAUD))
+    if (calc_normals and (shading_type == SHADING_PHONG or shading_type == SHADING_GOURAUD))
         m->make_vertex_normals();
 
     // isolates the exact point there is a problem
@@ -69,16 +69,16 @@ void Drawer::draw_polygons(TriangleMatrix *m, std::vector<double **> &sources, s
 //            cur_color.g = (unsigned char)(std::rand() % 255);
 //            cur_color.b = (unsigned char)(std::rand() % 255);
 
-            if(shading_type == SHADING_FLAT)
+            if (shading_type == SHADING_FLAT)
                 scan_line(s + 0, s + 4, s + 8);
 
-            if(shading_type == SHADING_PHONG)
+            if (shading_type == SHADING_PHONG)
                 scan_line_phong(m, sources, ambient, cons, s + 0, s + 4, s + 8);
 
-            if(shading_type == SHADING_GOURAUD)
+            if (shading_type == SHADING_GOURAUD)
                 scan_line_gouraund(m, sources, ambient, cons, s + 0, s + 4, s + 8);
 
-            if(shading_type == SHADING_WIREFRAME) {
+            if (shading_type == SHADING_WIREFRAME) {
                 draw_line_simon(s[0], s[1], s[2], s[4], s[5], s[6]);
                 draw_line_simon(s[4], s[5], s[6], s[8], s[9], s[10]);
                 draw_line_simon(s[0], s[1], s[2], s[8], s[9], s[10]);
@@ -93,7 +93,7 @@ void Drawer::draw_polygons(TriangleMatrix *m, std::vector<double **> &sources, s
 }
 
 void Drawer::set_shading(int t) {
-    switch(t){
+    switch (t) {
         case SHADING_WIREFRAME:
         case SHADING_FLAT:
         case SHADING_GOURAUD:
@@ -107,14 +107,14 @@ void Drawer::set_shading(int t) {
     }
 }
 
-void Drawer::draw_line_vector(float_mat x0, int y0, double z0, float_mat * n0,
-                              double x1, int y1, double z1, float_mat * n1,
+void Drawer::draw_line_vector(float_mat x0, int y0, double z0, float_mat *n0,
+                              double x1, int y1, double z1, float_mat *n1,
                               std::vector<double **> &sources, struct floating_color *ambient,
-                              struct constants *cons){
+                              struct constants *cons) {
 
     assert(y0 == y1);
 
-    if(x1 < x0)
+    if (x1 < x0)
         return draw_line_vector(x1, y1, z1, n1, x0, y0, z0, n0, sources, ambient, cons);
 
 
@@ -127,20 +127,20 @@ void Drawer::draw_line_vector(float_mat x0, int y0, double z0, float_mat * n0,
         float_mat curz = z0;
         float_mat dz = (z1 - z0) / (x1i - x0i);
 
-        float_mat * cv = empty_vector();
+        float_mat *cv = empty_vector();
         cv[0] = n0[0];
         cv[1] = n0[1];
         cv[2] = n0[2];
 
-        float_mat * dv = empty_vector();
+        float_mat *dv = empty_vector();
 
-        dv[0] = (n1[0] - n0[0])/(x1i - x0i);
-        dv[1] = (n1[1] - n0[1])/(x1i - x0i);
-        dv[2] = (n1[2] - n0[2])/(x1i - x0i);
+        dv[0] = (n1[0] - n0[0]) / (x1i - x0i);
+        dv[1] = (n1[1] - n0[1]) / (x1i - x0i);
+        dv[2] = (n1[2] - n0[2]) / (x1i - x0i);
 
         for (int x = x0i; x <= x1i; x++) {
 
-            float_mat * cvc = empty_vector();
+            float_mat *cvc = empty_vector();
 
             cvc[0] = cv[0];
             cvc[1] = cv[1];
@@ -176,14 +176,14 @@ void Drawer::draw_line_vector(float_mat x0, int y0, double z0, float_mat * n0,
 
 
     // set endpoints
-    float_mat * n0c = empty_vector();
+    float_mat *n0c = empty_vector();
     n0c[0] = n0[0];
     n0c[1] = n0[1];
     n0c[2] = n0[2];
     normalize_in_place(n0c);
     cur_color = *total_lighting(n0c, sources, ambient, cons);
     set(x0, y0, z0);
-    float_mat * n1c = empty_vector();
+    float_mat *n1c = empty_vector();
     n1c[0] = n1[0];
     n1c[1] = n1[1];
     n1c[2] = n1[2];
@@ -223,20 +223,20 @@ void Drawer::scan_line_phong(TriangleMatrix *m, std::vector<double **> &sources,
     float_mat z1 = z0;
     int y = (int) std::round(p0[1]);
 
-    float_mat * p0v = empty_vector();
-    float_mat * v0t = m->get_vertex_normal(p0);
+    float_mat *p0v = empty_vector();
+    float_mat *v0t = m->get_vertex_normal(p0);
     p0v[0] = v0t[0];
     p0v[1] = v0t[1];
     p0v[2] = v0t[2];
 
-    float_mat * p1v = empty_vector();
-    float_mat * v1t = m->get_vertex_normal(p1);
+    float_mat *p1v = empty_vector();
+    float_mat *v1t = m->get_vertex_normal(p1);
     p1v[0] = v1t[0];
     p1v[1] = v1t[1];
     p1v[2] = v1t[2];
 
-    float_mat * p2v = empty_vector();
-    float_mat * v2t = m->get_vertex_normal(p2);
+    float_mat *p2v = empty_vector();
+    float_mat *v2t = m->get_vertex_normal(p2);
     p2v[0] = v2t[0];
     p2v[1] = v2t[1];
     p2v[2] = v2t[2];
@@ -246,29 +246,29 @@ void Drawer::scan_line_phong(TriangleMatrix *m, std::vector<double **> &sources,
     float_mat d2 = (int) std::round(p2[1]) - (int) std::round(p1[1]);
 
     float_mat dx0 = 0, dx1 = 0, dz0 = 0, dz1 = 0;
-    float_mat * dv0 = empty_vector();
-    float_mat * dv1 = empty_vector();
+    float_mat *dv0 = empty_vector();
+    float_mat *dv1 = empty_vector();
 
     if (d0 != 0) {
         dx0 = (p2[0] - p0[0]) / d0;
         dz0 = (p2[2] - p0[2]) / d0;
-        dv0[0] = (p2v[0] - p0v[0])/d0;
-        dv0[1] = (p2v[1] - p0v[1])/d0;
-        dv0[2] = (p2v[2] - p0v[2])/d0;
+        dv0[0] = (p2v[0] - p0v[0]) / d0;
+        dv0[1] = (p2v[1] - p0v[1]) / d0;
+        dv0[2] = (p2v[2] - p0v[2]) / d0;
     }
     if (d1 != 0) {
         dx1 = (p1[0] - p0[0]) / d1;
         dz1 = (p1[2] - p0[2]) / d1;
-        dv1[0] = (p1v[0] - p0v[0])/d1;
-        dv1[1] = (p1v[1] - p0v[1])/d1;
-        dv1[2] = (p1v[2] - p0v[2])/d1;
+        dv1[0] = (p1v[0] - p0v[0]) / d1;
+        dv1[1] = (p1v[1] - p0v[1]) / d1;
+        dv1[2] = (p1v[2] - p0v[2]) / d1;
     }
 
     float_mat cur_z;
     float_mat dz;
 
-    float_mat * v0 = empty_vector();
-    float_mat * v1 = empty_vector();
+    float_mat *v0 = empty_vector();
+    float_mat *v1 = empty_vector();
     v0[0] = v1[0] = p0v[0];
     v0[1] = v1[1] = p0v[1];
     v0[2] = v1[2] = p0v[2];
@@ -309,9 +309,9 @@ void Drawer::scan_line_phong(TriangleMatrix *m, std::vector<double **> &sources,
             if (d2 != 0) {
                 dx1 = (p2[0] - p1[0]) / d2;
 
-                dv1[0] = (p2v[0] - p1v[0])/d2;
-                dv1[1] = (p2v[1] - p1v[1])/d2;
-                dv1[2] = (p2v[2] - p1v[2])/d2;
+                dv1[0] = (p2v[0] - p1v[0]) / d2;
+                dv1[1] = (p2v[1] - p1v[1]) / d2;
+                dv1[2] = (p2v[2] - p1v[2]) / d2;
 
                 // color here
 
@@ -335,8 +335,8 @@ void Drawer::draw_line_color(float_mat x0, int y0, double z0, floating_color &c0
         return draw_line_color(x1, y1, z1, c1, x0, y0, z0, c0);
     }
 
-//    printf("%f, %d, %f --> %f, %d, %f\n", x0, y0, z0, x1, y1, z1);
-//    printf("%f, %f, %f --> %f, %f, %f\n", c0.r, c0.g, c0.b, c1.r, c1.g, c1.b);
+    //  printf("%f, %d, %f --> %f, %d, %f\n", x0, y0, z0, x1, y1, z1);
+    // printf("%f, %f, %f --> %f, %f, %f\n", c0.r, c0.g, c0.b, c1.r, c1.g, c1.b);
 
     int x0i = (int) std::round(x0);
     int x1i = (int) std::round(x1);
@@ -450,8 +450,8 @@ void Drawer::scan_line_gouraund(TriangleMatrix *m, std::vector<double **> &sourc
     floating_color c0 = {p0c.r, p0c.g, p0c.b};
     floating_color c1 = {c0.r, c0.g, c0.b};
 
-//    printf("c0: %f, %f, %f\n", c0.r, c0.g, c0.b);
-//    printf("c1: %f, %f, %f\n", c1.r, c1.g, c1.b);
+    //printf("c0: %f, %f, %f\n", c0.r, c0.g, c0.b);
+    //printf("c1: %f, %f, %f\n", c1.r, c1.g, c1.b);
 
 
     float_mat d0 = (int) std::round(p2[1]) - y;

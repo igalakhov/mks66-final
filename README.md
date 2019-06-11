@@ -29,6 +29,9 @@ easing function endpoints can be: [in, out, inout]
 * Possibly camera and focal operations (???)
 
 
+### Random stuff I didn't upload so I don't spam the gallery
+
+
 NOTE: this project uses easing functions taken from here:
 
 https://github.com/jesusgollonet/ofpennereasing/tree/master/PennerEasing

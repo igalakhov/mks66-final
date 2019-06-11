@@ -1,0 +1,62 @@
+basename teapot
+frames 100
+
+shading gouraud
+ambient 50 50 50
+light l0 1 1 1 255 0 0
+light l1 -1 1 1 0 0 255
+light l2 0 -1 1 0 255 0
+light l3 0 1 1 255 255 255
+constants shiny_white 0.1 0.3 0.7 0.1 0.3 0.7 0.1 0.3 0.7
+constants matte_white 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0
+constants spot_white 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0
+constants even_white 0.0 0.5 0.5 0.0 0.5 0.5 0.0 0.5 0.5
+push
+move 250 250 0
+
+push
+move -125 -125 0
+rotate y 1 k
+rotate x 2 k
+rotate z 3 k
+move 0 -79 0 a
+scale 25 25 25
+mesh shiny_white :meshes/teapot.obj
+pop
+
+
+push
+move 125 -125 0
+rotate y 2 k
+rotate x 3 k
+rotate z 1 k
+move 0 -79 0 a
+scale 25 25 25
+mesh matte_white :meshes/teapot.obj
+pop
+
+
+push
+move -125 125 0
+rotate y 3 k
+rotate x 2 k
+rotate z 1 k
+move 0 -79 0 a
+scale 25 25 25
+mesh spot_white :meshes/teapot.obj
+pop
+
+push
+move 125 125 0
+rotate y 3 k
+rotate x 1 k
+rotate z 2 k
+move 0 -79 0 a
+scale 25 25 25
+mesh even_white :meshes/teapot.obj
+pop
+
+vary k 0 99 0 360 sine inout
+vary a 0 50 0 1 bounce inout
+vary a 51 99 1 0 bounce inout
+display

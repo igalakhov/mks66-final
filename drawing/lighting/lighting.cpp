@@ -5,8 +5,14 @@
 #include "lighting.h"
 
 
-floating_color * total_lighting_no_round(float_mat *normal, std::vector<double **> &sources,
-        struct floating_color * ambient_color, struct constants * cons){
+floating_color * total_lighting_no_round(float_mat *nc, std::vector<double **> &sources,
+    struct floating_color * ambient_color, struct constants * cons){
+
+    float_mat * normal = empty_vector();
+    normal[0] = nc[0];
+    normal[1] = nc[1];
+    normal[2] = nc[2];
+    normalize_in_place(normal);
 
 
     float r = 0;
@@ -41,13 +47,20 @@ floating_color * total_lighting_no_round(float_mat *normal, std::vector<double *
     ret->g = constrain(g, 0, 255);
     ret->b = constrain(b, 0, 255);
 
-    //printf("%f, %f, %f\n", ret->r, ret->g, ret->b);
+
+//    printf("ambient: %f %f %f\n", ambient->r, ambient->g, ambient->b);
+//
+//    printf("normal: %f %f %f\n", normal[0], normal[1], normal[2]);
+//
+//    printf("%f, %f, %f\n", ret->r, ret->g, ret->b);
 
     return ret;
 
 }
 
 color *total_lighting(float_mat *normal, std::vector<double **> &sources, struct floating_color * ambient_color, struct constants * cons){
+
+
     float r = 0;
     float g = 0;
     float b = 0;
@@ -95,8 +108,8 @@ floating_color *single_lighting(float_mat *normal, double ** source, struct cons
     floating_color *specular = calculate_specular(normal, source, cons); // calculate this last, as it modifies the normal
 
     //printf("ambient: %f, %f, %f\n", ambient->r, ambient->g, ambient->b);
-//    printf("diffuse: %f, %f, %f\n", diffuse->r, diffuse->g, diffuse->b);
-//    printf("specular: %f, %f, %f\n", specular->r, specular->g, specular->b);
+     //printf("diffuse: %f, %f, %f\n", diffuse->r, diffuse->g, diffuse->b);
+    //printf("specular: %f, %f, %f\n", specular->r, specular->g, specular->b);
 
 
 

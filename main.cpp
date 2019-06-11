@@ -36,7 +36,7 @@ void my_main() {
     first_pass();
 
     if (num_frames > 1) {
-        std::printf("Generating animation with %d frames, with my_basename %s\n", num_frames, my_basename.c_str());
+        std::printf("Generating animation with %d frames, with basename %s\n", num_frames, my_basename.c_str());
         std::system("mkdir -p anim");
         animate = true;
     } else
@@ -565,7 +565,10 @@ void render_frame(int frame) {
 
                 // mesh
             case MESH: {
-                OBJFileParser::draw_file(cur.op.mesh.name, drawer, light_sources, &ambient, &white, cord_stack->peek());
+                if(cur.op.mesh.constants == nullptr)
+                    OBJFileParser::draw_file(cur.op.mesh.name, drawer, light_sources, &ambient, &white, cord_stack->peek());
+                else
+                    OBJFileParser::draw_file(cur.op.mesh.name, drawer, light_sources, &ambient, cur.op.mesh.constants->s.c, cord_stack->peek());
 //                auto parser = new OBJFileParser(cur.op.mesh.name);
 //                triangle_matrix = parser->get_triangle_matrix();
 //                triangle_matrix->apply_transformation(cord_stack->peek());

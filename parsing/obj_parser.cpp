@@ -80,12 +80,15 @@ void OBJFileParser::draw_file(const char *file_name,
     if (materials.empty()) {
         triangles->apply_transformation(trans);
         d->draw_polygons(triangles, sources, ambient, default_material, true);
+        return;
     }
 
     // middle step:
     triangles->apply_transformation(trans); // necessarry
     triangles->make_vertex_normals();
-    std::unordered_map<unsigned long, float_mat *> vertex_normals = triangles->vertex_normals; // use this lter
+    std::unordered_map<unsigned long, float_mat *> vertex_normals = triangles->vertex_normals; // use this later
+
+    //std::cout << vertex_normals << std::endl;
 
 
     // second step: iterate again with colors
@@ -114,6 +117,7 @@ void OBJFileParser::draw_file(const char *file_name,
             // draw the old triangles on screen
             cur_triangles->apply_transformation(trans);
             cur_triangles->vertex_normals = vertex_normals;
+            //cur_triangles->make_vertex_normals();
             d->draw_polygons(cur_triangles, sources, ambient, cur_mat, false);
 
             // set up for new material
@@ -153,9 +157,9 @@ void OBJFileParser::draw_file(const char *file_name,
     }
 
 
-
     cur_triangles->apply_transformation(trans);
     cur_triangles->vertex_normals = vertex_normals;
+    //cur_triangles->make_vertex_normals();
     d->draw_polygons(cur_triangles, sources, ambient, cur_mat, false);
 }
 

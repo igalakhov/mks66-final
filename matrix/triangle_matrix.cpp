@@ -66,6 +66,13 @@ void TriangleMatrix::make_vertex_normals() {
     // iterate and normalize everything
     for(const auto kv : vertex_normals)
         normalize_in_place(kv.second);
+    //cur_triangles->vertex_normals = vertex_normals;
+
+    for(const auto kv : vertex_normals){
+        //printf("%f %f %f\n", kv.second[0], kv.second[1], kv.second[1]);
+        assert(kv.second[0] <= 1 and kv.second[1] <= 1 and kv.second[2] <= 1);
+    }
+
 }
 
 // returns the vertex normal if the vertex exists
@@ -81,5 +88,5 @@ float_mat * TriangleMatrix::get_vertex_normal(float_mat * s) {
 }
 
 unsigned long TriangleMatrix::getkey(float_mat a, float_mat b, float_mat c){
-    return (unsigned long) std::round(a*100000 + b*10000000000 + c*1000000000000000);
+    return (unsigned long) std::round(a*10000000 + b*1000000 + c*1000000000000000);
 }
