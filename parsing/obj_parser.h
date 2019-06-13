@@ -16,6 +16,8 @@
 #include "../matrix/edge_matrix.h"
 #include "../matrix/triangle_matrix.h"
 #include "../drawing/drawer.h"
+#include <cstring>
+#include <string.h>
 
 class OBJFileParser {
 public:
