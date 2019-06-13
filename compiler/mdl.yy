@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cstring>
 #include "../compiler/FlexLexer.h"
 #include "../compiler/parser.h"
 #include "../matrix/transformation_matrix.h"
