@@ -1,0 +1,40 @@
+light l0 -0.5 0.5 0.75 130 250 170
+light l1 0.5 0.5 0.75 170 100 130
+light l2 -0.5 -0.5 0.75 200 100 50
+light l3 0.5 -0.5 0.75 100 50 200
+
+shading wireframe
+shading phong
+
+set sc 20
+set xpos 250
+set ypos 250
+set xr -100
+set yr 200
+set zr 70
+
+// actual drawing
+move 0 -79 0
+move 1 0 0 xpos
+move 0 1 0 ypos
+scale 1 1 1 sc
+rotate x 1 xr
+rotate y 1 yr
+rotate z 1 zr
+
+mesh :meshes/teapot.obj
+
+// tweens
+set sc 60
+set xpos 50
+set ypos 450
+set xr 360
+set yr 360
+set zr 10
+
+save_knobs top_right
+
+
+
+
+display

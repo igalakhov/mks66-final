@@ -9,9 +9,23 @@ OBJECTS=$(BUILD_FOLDER)/main.o $(BUILD_FOLDER)/drawer.o $(BUILD_FOLDER)/display.
 FLAGS=-std=c++11
 
 
-all: prepare $(BUILD_FOLDER)/bison_parser.o $(BUILD_FOLDER)/flex_lexer.o $(OBJECTS)
+all: mdl.out
+	clear
+	@echo EASING DEMO;
+	./mdl.out scripts/easing_demo.mdl
+	@echo SHADING DEMO;
+	./mdl.out scripts/shading_demo.mdl
+	@echo TWEEN DEMO;
+	./mdl.out scripts/tween_demo.mdl
+	@echo MESH MATERIAL DEMO;
+	./mdl.out scripts/mesh_test.mdl
+
+	clear
+	@echo THATS IT!!!!;
+	@echo GRAPHICS WAS REALLY FUN TO TAKE THANK YOU FOR MAKING IT ENJOYABLE;
+
+mdl.out: prepare $(BUILD_FOLDER)/bison_parser.o $(BUILD_FOLDER)/flex_lexer.o $(OBJECTS)
 	g++ $(FLAGS) -o mdl.out $(OBJECTS) $(BUILD_FOLDER)/bison_parser.o $(BUILD_FOLDER)/flex_lexer.o -ll
-	./mdl.out scripts/fortnite.mdl
 
 prepare:
 	mkdir -p build

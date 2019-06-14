@@ -1,5 +1,5 @@
 shading phong
-my_basename easing_demo
+basename easing_demo
 frames 100
 
 move 75 425 0

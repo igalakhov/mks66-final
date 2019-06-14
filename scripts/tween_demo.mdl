@@ -1,4 +1,4 @@
-my_basename tween_demo
+basename tween_demo
 frames 100
 shading phong
 light l0 -0.5 -0.5 0.75 130 250 170

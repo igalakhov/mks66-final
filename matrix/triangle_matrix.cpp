@@ -70,7 +70,7 @@ void TriangleMatrix::make_vertex_normals() {
 
     for(const auto kv : vertex_normals){
         //printf("%f %f %f\n", kv.second[0], kv.second[1], kv.second[1]);
-        assert(kv.second[0] <= 1 and kv.second[1] <= 1 and kv.second[2] <= 1);
+        //assert(kv.second[0] <= 1 and kv.second[1] <= 1 and kv.second[2] <= 1);
     }
 
 }

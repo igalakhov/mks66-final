@@ -4,7 +4,6 @@ Name: Ivan Galakhov
 
 Team Name: Ivan Galakhov
 
-
 ### new command
 vary [knob] [start frame] [end frame] [start value] [end value] [easing function] [easing function endpoints]
 
@@ -24,13 +23,7 @@ easing function endpoints can be: [in, out, inout]
 * Tweens (with easing functions)
 * OBJ file parsing (with mtl material files)
 
-
-### features wishlist
-* Possibly camera and focal operations (???)
-
-
-### Random stuff I didn't upload so I don't spam the gallery
-
+(all of these can be seen in the four demos you get with make)
 
 NOTE: this project uses easing functions taken from here:
 

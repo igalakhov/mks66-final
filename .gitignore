@@ -3,6 +3,8 @@
 *.txt
 cmake-build-debug/
 CMakeLists.txt
+meshes/dragon/
+scripts/dragon/
 
 # Graphics specifics
 *.ppm
